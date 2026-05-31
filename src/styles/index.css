@@ -44,4 +44,6 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* iOS home indicator */
+  padding-bottom: env(safe-area-inset-bottom);
 }

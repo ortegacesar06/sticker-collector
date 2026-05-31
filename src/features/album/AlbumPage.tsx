@@ -37,9 +37,9 @@ export default function AlbumPage() {
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-screen">
       <FilterBar />
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 min-h-0">
         <AlbumGrid />
       </div>
       <BottomNav />

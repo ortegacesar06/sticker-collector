@@ -83,7 +83,6 @@ export function AlbumGrid() {
     <div
       ref={parentRef}
       className="flex-1 overflow-auto p-2"
-      style={{ contain: 'strict' }}
     >
       <div
         style={{
@@ -103,19 +102,20 @@ export function AlbumGrid() {
             return (
               <div
                 key={virtualRow.index}
-                className="sticky top-0 z-10 bg-bg/95 backdrop-blur-sm"
                 style={{
                   position: 'absolute',
                   top: 0,
                   left: 0,
                   width: '100%',
                   height: virtualRow.size,
-                  transform: `translateY(${virtualRow.start - rowVirtualizer.options.scrollMargin}px)`,
+                  transform: `translateY(${virtualRow.start}px)`,
                 }}
               >
-                <h2 className="text-sm font-bold text-ink px-1 mb-2 uppercase tracking-wider">
-                  {section.team} ({section.stickers.length})
-                </h2>
+                <div className="sticky top-0 z-10 bg-bg/95 backdrop-blur-sm">
+                  <h2 className="text-sm font-bold text-ink px-1 py-1 uppercase tracking-wider">
+                    {section.team} ({section.stickers.length})
+                  </h2>
+                </div>
               </div>
             )
           }
@@ -133,7 +133,7 @@ export function AlbumGrid() {
                 left: 0,
                 width: '100%',
                 height: virtualRow.size,
-                transform: `translateY(${virtualRow.start - rowVirtualizer.options.scrollMargin}px)`,
+                transform: `translateY(${virtualRow.start}px)`,
               }}
             >
               <div className="grid grid-cols-5 gap-2 h-full">
