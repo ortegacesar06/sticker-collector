@@ -14,6 +14,18 @@
   --danger: #E23636;
 }
 
+.dark {
+  --bg: #0E1116;
+  --surface: #1A1D23;
+  --ink: #F4F5F7;
+  --accent: #FF3D9B;
+  --accent-2: #3D8BFF;
+  --gold: #FFC233;
+  --pitch: #00D68F;
+  --missing: #6B7280;
+  --danger: #FF4D4D;
+}
+
 * {
   box-sizing: border-box;
 }
