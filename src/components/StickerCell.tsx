@@ -15,12 +15,16 @@ export function StickerCell({ sticker }: Props) {
   const isDuplicate = count > 1
 
   const bgClass = has ? 'bg-pitch' : 'bg-missing'
-  const textClass = has ? 'text-white' : 'text-white'
 
   return (
     <button
       onClick={() => navigate(`/sticker/${sticker.number}`)}
-      className={`relative w-full aspect-[3/4] rounded-lg ${bgClass} ${textClass} flex flex-col items-center justify-center overflow-hidden transition-all active:scale-95`}
+      className={`
+        relative w-full aspect-[3/4] rounded-lg ${bgClass} text-white
+        flex flex-col items-center justify-center overflow-hidden
+        transition-all duration-200 ease-out active:scale-95
+        ${!has ? 'grayscale opacity-60' : ''}
+      `}
     >
       <span className="font-bold text-xs opacity-80">#{sticker.number}</span>
       <span className="text-[8px] leading-tight text-center px-1 opacity-70">
