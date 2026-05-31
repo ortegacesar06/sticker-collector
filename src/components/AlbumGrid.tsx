@@ -6,7 +6,7 @@ import { StickerCell } from './StickerCell'
 import type { Sticker } from '../data/types'
 
 const STICKERS_PER_ROW = 5
-const ROW_HEIGHT = 120 // approximate height of a row (cell height + gap + header space)
+const ROW_HEIGHT = 120
 
 interface TeamSection {
   team: string
@@ -20,14 +20,13 @@ export function AlbumGrid() {
   const parentRef = useRef<HTMLDivElement>(null)
 
   if (!catalog) {
-    return <div className="p-4 text-missing">No catalog loaded</div>
+    return <div className="p-4 text-missing" role="alert">No catalog loaded</div>
   }
 
   const teams = useMemo(() => getTeams(catalog), [catalog])
   const filteredNumbers = getFilteredNumbers()
   const filteredSet = new Set(filteredNumbers)
 
-  // Build team sections with row offsets for sticky headers
   const sections = useMemo<TeamSection[]>(() => {
     const result: TeamSection[] = []
     let currentRow = 0
@@ -44,7 +43,6 @@ export function AlbumGrid() {
         offsetRow: currentRow,
       })
 
-      // Each section has a header + ceil(stickers.length / STICKERS_PER_ROW) rows
       currentRow += 1 + Math.ceil(teamStickers.length / STICKERS_PER_ROW)
     }
 
@@ -65,7 +63,6 @@ export function AlbumGrid() {
     overscan: 5,
   })
 
-  // Find which team section owns a given row index
   const getSectionForRow = (rowIndex: number): TeamSection | null => {
     for (const section of sections) {
       const teamRowCount = 1 + Math.ceil(section.stickers.length / STICKERS_PER_ROW)
@@ -83,6 +80,9 @@ export function AlbumGrid() {
     <div
       ref={parentRef}
       className="flex-1 overflow-auto p-2"
+      role="region"
+      aria-label="Sticker album grid"
+      tabIndex={0}
     >
       <div
         style={{
@@ -112,7 +112,10 @@ export function AlbumGrid() {
                 }}
               >
                 <div className="sticky top-0 z-10 bg-bg/95 backdrop-blur-sm">
-                  <h2 className="text-sm font-bold text-ink px-1 py-1 uppercase tracking-wider">
+                  <h2 
+                    className="text-sm font-bold text-ink px-1 py-1 uppercase tracking-wider team-header"
+                    id={`team-header-${section.team}`}
+                  >
                     {section.team} ({section.stickers.length})
                   </h2>
                 </div>
@@ -135,6 +138,8 @@ export function AlbumGrid() {
                 height: virtualRow.size,
                 transform: `translateY(${virtualRow.start}px)`,
               }}
+              role="group"
+              aria-labelledby={`team-header-${section.team}`}
             >
               <div className="grid grid-cols-5 gap-2 h-full">
                 {rowStickers.map((sticker) => (

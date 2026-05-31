@@ -20,7 +20,6 @@ export default function RepesPage() {
     )
   }
 
-  // Gather duplicate stickers (count > 1)
   const duplicateStickers: TradeListItem[] = []
   const missingStickers: TradeListItem[] = []
 
@@ -39,7 +38,6 @@ export default function RepesPage() {
       if (teamCmp !== 0) return teamCmp
       return a.stickerNumber - b.stickerNumber
     } else {
-      // Sort by count descending, then by team
       if (b.count !== a.count) return b.count - a.count
       return a.team.localeCompare(b.team)
     }
@@ -51,52 +49,54 @@ export default function RepesPage() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-surface">
+      <header className="flex items-center justify-between px-4 py-3 border-b border-surface">
         <div>
           <h1 className="text-lg font-semibold text-ink">Mis Repetidas</h1>
-          <p className="text-sm text-missing">
+          <p className="text-sm text-missing" aria-live="polite">
             {duplicateStickers.length} sticker{duplicateStickers.length !== 1 ? 's' : ''} ({excessCount} sobran)
           </p>
         </div>
         <ShareButton text={tradeListText} label="Compartir" />
-      </div>
+      </header>
 
       {/* Sort controls */}
-      <div className="flex gap-2 px-4 py-2 border-b border-surface">
+      <div className="flex gap-2 px-4 py-2 border-b border-surface" role="group" aria-label="Sort options">
         <button
           type="button"
           onClick={() => setSortMode('team')}
-          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+          className={`px-3 py-2 rounded-full text-sm font-medium transition-colors touch-target ${
             sortMode === 'team' ? 'bg-accent text-white' : 'bg-surface text-ink'
           }`}
+          aria-pressed={sortMode === 'team'}
         >
           Por equipo
         </button>
         <button
           type="button"
           onClick={() => setSortMode('count')}
-          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+          className={`px-3 py-2 rounded-full text-sm font-medium transition-colors touch-target ${
             sortMode === 'count' ? 'bg-accent text-white' : 'bg-surface text-ink'
           }`}
+          aria-pressed={sortMode === 'count'}
         >
           Por cantidad
         </button>
       </div>
 
       {/* Sticker list */}
-      <div className="flex-1 overflow-y-auto px-4 py-2">
+      <main className="flex-1 overflow-y-auto px-4 py-2" role="main" aria-label="Duplicate stickers">
         {sortedDuplicates.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-3">
             <p className="text-missing text-center">No tenes Stickers repetidos todavia.</p>
             <p className="text-missing text-sm text-center">Los stickers con count &gt; 1 apareceran aqui.</p>
           </div>
         ) : (
-          <div className="flex flex-col gap-2 pb-4">
+          <ul className="flex flex-col gap-2 pb-4" aria-label="Duplicate sticker list">
             {sortedDuplicates.map((item) => {
               const sticker = getStickerByNumber(item.stickerNumber)
               const excess = item.count - 1
               return (
-                <div
+                <li
                   key={item.stickerNumber}
                   className="flex items-center justify-between rounded-xl bg-surface px-4 py-3"
                 >
@@ -116,16 +116,16 @@ export default function RepesPage() {
                     <span className="text-sm text-missing">
                       Tengo <span className="font-bold text-ink">{item.count}</span>
                     </span>
-                    <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-white">
+                    <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-white" aria-label={`${excess} extras`}>
                       {excess} sobran
                     </span>
                   </div>
-                </div>
+                </li>
               )
             })}
-          </div>
+          </ul>
         )}
-      </div>
+      </main>
     </div>
   )
 }

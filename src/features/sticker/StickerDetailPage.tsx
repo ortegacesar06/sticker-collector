@@ -58,9 +58,19 @@ export default function StickerDetailPage() {
     touchEndX.current = null
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowLeft' && adjacent.prev !== null) {
+      e.preventDefault()
+      navigateTo(adjacent.prev)
+    } else if (e.key === 'ArrowRight' && adjacent.next !== null) {
+      e.preventDefault()
+      navigateTo(adjacent.next)
+    }
+  }
+
   if (!sticker) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4">
+      <div className="flex flex-col items-center justify-center h-full gap-4" role="alert">
         <p className="text-danger">Sticker #{id} not found</p>
         <button onClick={() => navigate(-1)} className="text-accent underline">Go back</button>
       </div>
@@ -73,10 +83,18 @@ export default function StickerDetailPage() {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onKeyDown={handleKeyDown}
+      role="main"
+      aria-label={`Sticker detail: ${sticker.name}`}
+      tabIndex={0}
     >
       {/* Header */}
       <div className="flex items-center gap-4 p-4">
-        <button onClick={() => navigate(-1)} className="text-ink active:scale-95 transition-transform">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="text-ink active:scale-95 transition-transform touch-target flex items-center justify-center"
+          aria-label="Go back"
+        >
           <ArrowLeft size={24} />
         </button>
         <div className="flex-1">
@@ -87,23 +105,25 @@ export default function StickerDetailPage() {
       </div>
 
       {/* Swipe Navigation */}
-      <div className="flex items-center px-2 mb-2">
+      <div className="flex items-center px-2 mb-2" role="navigation" aria-label="Sticker navigation">
         {adjacent.prev !== null ? (
           <button
             onClick={() => navigateTo(adjacent.prev!)}
-            className="flex items-center gap-1 text-ink text-sm active:scale-95 transition-transform"
+            className="flex items-center gap-1 text-ink text-sm active:scale-95 transition-transform touch-target py-2"
+            aria-label={`Previous sticker, #${adjacent.prev}`}
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={16} aria-hidden="true" />
             <span className="text-xs opacity-60">#{adjacent.prev}</span>
           </button>
         ) : <div />}
         {adjacent.next !== null && (
           <button
             onClick={() => navigateTo(adjacent.next!)}
-            className="ml-auto flex items-center gap-1 text-ink text-sm active:scale-95 transition-transform"
+            className="ml-auto flex items-center gap-1 text-ink text-sm active:scale-95 transition-transform touch-target py-2"
+            aria-label={`Next sticker, #${adjacent.next}`}
           >
             <span className="text-xs opacity-60">#{adjacent.next}</span>
-            <ChevronRight size={16} />
+            <ChevronRight size={16} aria-hidden="true" />
           </button>
         )}
       </div>
@@ -117,11 +137,15 @@ export default function StickerDetailPage() {
             transition-all duration-200
             ${count > 0 ? '' : 'grayscale opacity-60'}
           `}
+          role="img"
+          aria-label={`Sticker ${sticker.name}, number ${sticker.number}, ${count > 0 ? 'owned' : 'not owned'}`}
         >
           {/* Flag placeholder */}
-          <div className="text-4xl mb-2">{sticker.countryCode === 'AR' ? '🇦🇷' : sticker.countryCode === 'BR' ? '🇧🇷' : '🏳️'}</div>
+          <div className="text-4xl mb-2" aria-hidden="true">
+            {sticker.countryCode === 'AR' ? '🇦🇷' : sticker.countryCode === 'BR' ? '🇧🇷' : '🏳️'}
+          </div>
           {/* Sticker number */}
-          <span className="text-5xl font-bold text-ink opacity-20 mb-2">#{sticker.number}</span>
+          <span className="text-5xl font-bold text-ink opacity-20 mb-2" aria-hidden="true">#{sticker.number}</span>
           {/* Player name */}
           <span className="text-sm font-medium text-ink text-center px-4">{sticker.name}</span>
           {/* Position badge */}
@@ -138,7 +162,7 @@ export default function StickerDetailPage() {
       </div>
 
       {/* Player Info Row */}
-      <div className="flex items-center justify-center gap-4 px-6 pb-4 text-xs text-missing">
+      <div className="flex items-center justify-center gap-4 px-6 pb-4 text-xs text-missing" role="contentinfo">
         <span className="font-medium">{sticker.team}</span>
         <span>·</span>
         <span>{sticker.position}</span>
@@ -157,7 +181,7 @@ export default function StickerDetailPage() {
       </div>
 
       {/* Count Controls */}
-      <div className="flex items-center justify-center gap-8 p-6 border-t border-surface">
+      <div className="flex items-center justify-center gap-8 p-6 border-t border-surface" role="group" aria-label="Sticker count controls">
         <button
           onClick={() => {
             if (count > 0) {
@@ -165,12 +189,15 @@ export default function StickerDetailPage() {
               triggerHaptic()
             }
           }}
-          className="w-14 h-14 rounded-full bg-surface text-ink text-2xl font-bold flex items-center justify-center active:scale-95 transition-transform"
+          disabled={count === 0}
+          className="w-14 h-14 rounded-full bg-surface text-ink text-2xl font-bold flex items-center justify-center active:scale-95 transition-transform touch-target disabled:opacity-40 disabled:cursor-not-allowed"
+          aria-label="Decrease count"
+          aria-disabled={count === 0}
         >
           −
         </button>
-        <div className="flex flex-col items-center">
-          <span className="text-4xl font-bold text-ink">{count}</span>
+        <div className="flex flex-col items-center" role="status" aria-live="polite">
+          <span className="text-4xl font-bold text-ink" aria-label={`${count} stickers owned`}>{count}</span>
           <span className="text-missing text-xs uppercase tracking-wider">Have</span>
         </div>
         <button
@@ -178,7 +205,8 @@ export default function StickerDetailPage() {
             increment(sticker.number)
             triggerHaptic()
           }}
-          className="w-14 h-14 rounded-full bg-accent text-white text-2xl font-bold flex items-center justify-center active:scale-95 transition-transform"
+          className="w-14 h-14 rounded-full bg-accent text-white text-2xl font-bold flex items-center justify-center active:scale-95 transition-transform touch-target"
+          aria-label="Increase count"
         >
           +
         </button>
@@ -192,7 +220,8 @@ export default function StickerDetailPage() {
               setZero(sticker.number)
               triggerHaptic()
             }}
-            className="w-full py-2 rounded-lg bg-surface text-danger text-sm font-medium active:scale-95 transition-transform"
+            className="w-full py-3 rounded-lg bg-surface text-danger text-sm font-medium active:scale-95 transition-transform touch-target"
+            aria-label="Remove all stickers, set count to zero"
           >
             Remove all (set to 0)
           </button>

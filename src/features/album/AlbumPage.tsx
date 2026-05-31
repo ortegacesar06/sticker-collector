@@ -21,7 +21,7 @@ export default function AlbumPage() {
 
   if (loadError) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 p-8 text-center">
+      <div className="flex flex-col items-center justify-center h-full gap-4 p-8 text-center" role="alert">
         <p className="text-danger font-medium">Error loading catalog</p>
         <p className="text-missing text-sm">{loadError}</p>
       </div>
@@ -30,7 +30,7 @@ export default function AlbumPage() {
 
   if (!catalogLoaded) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-full" aria-live="polite" aria-busy="true">
         <div className="text-accent font-medium">Loading album...</div>
       </div>
     )
@@ -38,10 +38,11 @@ export default function AlbumPage() {
 
   return (
     <div className="flex flex-col h-screen">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <FilterBar />
-      <div className="flex-1 min-h-0">
+      <main id="main-content" className="flex-1 min-h-0">
         <AlbumGrid />
-      </div>
+      </main>
       <BottomNav />
     </div>
   )

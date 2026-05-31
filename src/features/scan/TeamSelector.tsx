@@ -12,21 +12,32 @@ export function TeamSelector({ number, matches, onSelect, onCancel }: Props) {
   const getCount = useCollectionStore((s) => s.getCount)
 
   return (
-    <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-2xl shadow-2xl p-4 animate-slide-up">
+    <div 
+      className="absolute inset-x-0 bottom-0 bg-white rounded-t-2xl shadow-2xl p-4 animate-slide-up"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="team-selector-title"
+    >
       <div className="text-center mb-4">
         <p className="text-sm text-missing">El número</p>
-        <p className="text-3xl font-bold text-ink">#{number}</p>
+        <p id="team-selector-title" className="text-3xl font-bold text-ink">#{number}</p>
         <p className="text-sm text-missing">aparece en varios equipos</p>
       </div>
 
-      <div className="flex flex-col gap-2 mb-4">
+      <div className="flex flex-col gap-2 mb-4" role="listbox" aria-label="Seleccionar equipo">
         {matches.map((sticker) => (
           <button
             key={`${sticker.team}-${sticker.number}`}
             onClick={() => onSelect(sticker)}
-            className="flex items-center gap-3 p-3 rounded-lg bg-surface hover:bg-surface/80 active:scale-[0.98] transition-all"
+            className="flex items-center gap-3 p-3 rounded-lg bg-surface hover:bg-surface/80 active:scale-[0.98] transition-all touch-target"
+            role="option"
+            aria-selected="false"
           >
-            <div className="w-12 h-16 bg-gradient-to-br from-pitch to-pitch/80 rounded flex items-center justify-center text-white">
+            <div 
+              className="w-12 h-16 bg-gradient-to-br from-pitch to-pitch/80 rounded flex items-center justify-center text-white"
+              role="img"
+              aria-label={`Sticker #${sticker.number}`}
+            >
               <span className="text-sm font-bold">#{sticker.number}</span>
             </div>
             <div className="flex-1 text-left">
@@ -36,7 +47,7 @@ export function TeamSelector({ number, matches, onSelect, onCancel }: Props) {
                 <p className="text-xs text-missing">{sticker.club}</p>
               )}
             </div>
-            <div className="text-right">
+            <div className="text-right" aria-live="polite">
               <span className="text-sm font-medium text-pitch">×{getCount(sticker.number)}</span>
             </div>
           </button>
@@ -45,7 +56,8 @@ export function TeamSelector({ number, matches, onSelect, onCancel }: Props) {
 
       <button
         onClick={onCancel}
-        className="w-full py-3 rounded-lg bg-surface text-ink font-medium active:scale-95 transition-transform"
+        className="w-full py-3 rounded-lg bg-surface text-ink font-medium active:scale-95 transition-transform touch-target"
+        aria-label="Cancelar selección de equipo"
       >
         Cancelar
       </button>

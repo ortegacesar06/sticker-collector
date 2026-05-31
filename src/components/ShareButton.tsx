@@ -15,6 +15,7 @@ export function ShareButton({ text, label = 'Compartir', className = '' }: Share
       try {
         await navigator.share({ text })
         setState('shared')
+        setTimeout(() => setState('idle'), 2000)
       } catch {
         // User cancelled or share failed — fall back to clipboard
         await copyToClipboard()
@@ -28,22 +29,25 @@ export function ShareButton({ text, label = 'Compartir', className = '' }: Share
     try {
       await navigator.clipboard.writeText(text)
       setState('copied')
+      setTimeout(() => setState('idle'), 2000)
     } catch {
       // Clipboard API not available
     }
   }
 
-  const icon = state === 'idle' ? <Share2 size={16} /> : state === 'copied' ? <Check size={16} /> : <Copy size={16} />
+  const icon = state === 'idle' ? <Share2 size={16} aria-hidden="true" /> : state === 'copied' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />
   const labelText = state === 'idle' ? label : state === 'copied' ? 'Copiado!' : 'Compartido!'
 
   return (
     <button
       type="button"
       onClick={handleShare}
-      className={`flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-all active:scale-95 ${className}`}
+      className={`flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-all active:scale-95 touch-target ${className}`}
+      aria-label={state === 'idle' ? `Share: ${label}` : labelText}
+      aria-live="polite"
     >
       {icon}
-      {labelText}
+      <span>{labelText}</span>
     </button>
   )
 }

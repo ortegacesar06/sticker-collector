@@ -35,6 +35,14 @@ export function ManualEntryPad({ onConfirm, onCancel }: Props) {
     }
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent, key: string) => {
+    if (e.key === 'Enter') {
+      if (key === 'C') handleClear()
+      else if (key === '⌫') handleBackspace()
+      else handleDigit(key)
+    }
+  }
+
   const digitRows = [
     ['1', '2', '3'],
     ['4', '5', '6'],
@@ -43,21 +51,34 @@ export function ManualEntryPad({ onConfirm, onCancel }: Props) {
   ]
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-white" role="dialog" aria-modal="true" aria-labelledby="manual-entry-title">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-surface">
-        <h2 className="text-lg font-semibold text-ink">Entrada manual</h2>
-        <button onClick={onCancel} className="p-2 text-missing">
+        <h2 id="manual-entry-title" className="text-lg font-semibold text-ink">Entrada manual</h2>
+        <button 
+          onClick={onCancel} 
+          className="p-2 text-missing touch-target flex items-center justify-center"
+          aria-label="Cerrar entrada manual"
+        >
           ✕
         </button>
       </div>
 
       {/* Display */}
       <div className="p-4">
-        <div className="bg-surface rounded-xl p-4 flex items-center justify-center min-h-[80px]">
+        <div 
+          className="bg-surface rounded-xl p-4 flex items-center justify-center min-h-[80px]" 
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           {sticker ? (
             <div className="flex items-center gap-4">
-              <div className="w-14 h-20 bg-gradient-to-br from-pitch to-pitch/80 rounded-lg flex items-center justify-center text-white">
+              <div 
+                className="w-14 h-20 bg-gradient-to-br from-pitch to-pitch/80 rounded-lg flex items-center justify-center text-white"
+                role="img"
+                aria-label={`Sticker #${sticker.number}`}
+              >
                 <span className="text-xl font-bold">#{sticker.number}</span>
               </div>
               <div>
@@ -79,7 +100,7 @@ export function ManualEntryPad({ onConfirm, onCancel }: Props) {
 
       {/* Keypad */}
       <div className="flex-1 flex flex-col justify-center px-8">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-3" role="group" aria-label="Teclado numérico">
           {digitRows.flat().map((key) => (
             <button
               key={key}
@@ -88,13 +109,15 @@ export function ManualEntryPad({ onConfirm, onCancel }: Props) {
                 else if (key === '⌫') handleBackspace()
                 else handleDigit(key)
               }}
+              onKeyDown={(e) => handleKeyDown(e, key)}
               className={`
-                h-14 rounded-xl text-xl font-medium transition-all active:scale-95
+                h-14 rounded-xl text-xl font-medium transition-all active:scale-95 touch-target
                 ${key === 'C' || key === '⌫'
                   ? 'bg-surface text-ink'
                   : 'bg-surface hover:bg-surface/80 text-ink'
                 }
               `}
+              aria-label={key === 'C' ? 'Limpiar' : key === '⌫' ? 'Borrar' : `Número ${key}`}
             >
               {key}
             </button>
@@ -108,12 +131,14 @@ export function ManualEntryPad({ onConfirm, onCancel }: Props) {
           onClick={handleConfirm}
           disabled={!sticker}
           className={`
-            w-full py-4 rounded-xl font-semibold text-lg transition-all active:scale-95
+            w-full py-4 rounded-xl font-semibold text-lg transition-all active:scale-95 touch-target
             ${sticker
               ? 'bg-pitch text-white'
               : 'bg-surface text-missing cursor-not-allowed'
             }
           `}
+          aria-disabled={!sticker}
+          aria-label="Confirmar número de sticker"
         >
           Confirmar
         </button>
