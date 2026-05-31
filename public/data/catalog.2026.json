@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0-stub",
+  "total": 50,
+  "stickers": [
+    { "number": 1, "name": "Logo Argentina", "team": "ARG", "countryCode": "AR", "position": "emblem", "image": "arg-emblems.png" },
+    { "number": 2, "name": "Lionel Messi", "team": "ARG", "countryCode": "AR", "position": "player", "club": "Inter Miami", "jersey": 10, "image": "arg-10-messi.png" },
+    { "number": 3, "name": "Ángel Di María", "team": "ARG", "countryCode": "AR", "position": "player", "club": "Benfica", "jersey": 11, "image": "arg-11-di-maria.png" },
+    { "number": 4, "name": "Emiliano Martínez", "team": "ARG", "countryCode": "AR", "position": "player", "club": "Aston Villa", "jersey": 23, "image": "arg-23-dibu.png" },
+    { "number": 5, "name": "Rodrigo De Paul", "team": "ARG", "countryCode": "AR", "position": "player", "club": "Atlético Madrid", "jersey": 7, "image": "arg-7-de-paul.png" },
+
+    { "number": 6, "name": "Logo Brasil", "team": "BRA", "countryCode": "BR", "position": "emblem", "image": "bra-emblems.png" },
+    { "number": 7, "name": "Neymar Jr", "team": "BRA", "countryCode": "BR", "position": "player", "club": "Al-Hilal", "jersey": 10, "image": "bra-10-neymar.png" },
+    { "number": 8, "name": "Vinícius Jr", "team": "BRA", "countryCode": "BR", "position": "player", "club": "Real Madrid", "jersey": 18, "image": "bra-18-vini.png" },
+    { "number": 9, "name": "Alisson Becker", "team": "BRA", "countryCode": "BR", "position": "player", "club": "Liverpool", "jersey": 1, "image": "bra-1-alisson.png" },
+    { "number": 10, "name": "Casemiro", "team": "BRA", "countryCode": "BR", "position": "player", "club": "Manchester United", "jersey": 18, "image": "bra-18-casemiro.png" },
+
+    { "number": 11, "name": "Logo USA", "team": "USA", "countryCode": "US", "position": "emblem", "image": "usa-emblems.png" },
+    { "number": 12, "name": "Christian Pulisic", "team": "USA", "countryCode": "US", "position": "player", "club": "AC Milan", "jersey": 10, "image": "usa-10-pulisic.png" },
+    { "number": 13, "name": "Weston McKennie", "team": "USA", "countryCode": "US", "position": "player", "club": "Juventus", "jersey": 8, "image": "usa-8-mckennie.png" },
+    { "number": 14, "name": "Tyler Adams", "team": "USA", "countryCode": "US", "position": "player", "club": "Bournemouth", "jersey": 4, "image": "usa-4-adams.png" },
+    { "number": 15, "name": "Matt Turner", "team": "USA", "countryCode": "US", "position": "player", "club": "Nottingham Forest", "jersey": 1, "image": "usa-1-turner.png" },
+
+    { "number": 16, "name": "Logo Deutschland", "team": "GER", "countryCode": "DE", "position": "emblem", "image": "ger-emblems.png" },
+    { "number": 17, "name": "Manuel Neuer", "team": "GER", "countryCode": "DE", "position": "player", "club": "Bayern München", "jersey": 1, "image": "ger-1-neuer.png" },
+    { "number": 18, "name": "Jamal Musiala", "team": "GER", "countryCode": "DE", "position": "player", "club": "Bayern München", "jersey": 14, "image": "ger-14-musiala.png" },
+    { "number": 19, "name": "Florian Wirtz", "team": "GER", "countryCode": "DE", "position": "player", "club": "Bayer Leverkusen", "jersey": 17, "image": "ger-17-wirtz.png" },
+    { "number": 20, "name": "Kai Havertz", "team": "GER", "countryCode": "DE", "position": "player", "club": "Arsenal", "jersey": 29, "image": "ger-29-havertz.png" },
+
+    { "number": 21, "name": "Logo France", "team": "FRA", "countryCode": "FR", "position": "emblem", "image": "fra-emblems.png" },
+    { "number": 22, "name": "Kylian Mbappé", "team": "FRA", "countryCode": "FR", "position": "player", "club": "Real Madrid", "jersey": 9, "image": "fra-9-mbappe.png" },
+    { "number": 23, "name": "Antoine Griezmann", "team": "FRA", "countryCode": "FR", "position": "player", "club": "Atlético Madrid", "jersey": 7, "image": "fra-7-griezmann.png" },
+    { "number": 24, "name": "N'Golo Kanté", "team": "FRA", "countryCode": "FR", "position": "player", "club": "Al-Ittihad", "jersey": 13, "image": "fra-13-kante.png" },
+    { "number": 25, "name": "William Saliba", "team": "FRA", "countryCode": "FR", "position": "player", "club": "Arsenal", "jersey": 2, "image": "fra-2-saliba.png" },
+
+    { "number": 26, "name": "Logo España", "team": "ESP", "countryCode": "ES", "position": "emblem", "image": "esp-emblems.png" },
+    { "number": 27, "name": "Rodri", "team": "ESP", "countryCode": "ES", "position": "player", "club": "Manchester City", "jersey": 16, "image": "esp-16-rodri.png" },
+    { "number": 28, "name": "Lamine Yamal", "team": "ESP", "countryCode": "ES", "position": "player", "club": "FC Barcelona", "jersey": 19, "image": "esp-19-yamal.png" },
+    { "number": 29, "name": "Pedri", "team": "ESP", "countryCode": "ES", "position": "player", "club": "FC Barcelona", "jersey": 8, "image": "esp-8-pedri.png" },
+    { "number": 30, "name": "Dani Carvajal", "team": "ESP", "countryCode": "ES", "position": "player", "club": "Real Madrid", "jersey": 2, "image": "esp-2-carvajal.png" },
+
+    { "number": 31, "name": "Logo England", "team": "ENG", "countryCode": "GB", "position": "emblem", "image": "eng-emblems.png" },
+    { "number": 32, "name": "Harry Kane", "team": "ENG", "countryCode": "GB", "position": "player", "club": "Bayern München", "jersey": 9, "image": "eng-9-kane.png" },
+    { "number": 33, "name": "Jude Bellingham", "team": "ENG", "countryCode": "GB", "position": "player", "club": "Real Madrid", "jersey": 5, "image": "eng-5-bellingham.png" },
+    { "number": 34, "name": "Bukayo Saka", "team": "ENG", "countryCode": "GB", "position": "player", "club": "Arsenal", "jersey": 7, "image": "eng-7-saka.png" },
+    { "number": 35, "name": "John Stones", "team": "ENG", "countryCode": "GB", "position": "player", "club": "Manchester City", "jersey": 5, "image": "eng-5-stones.png" },
+
+    { "number": 36, "name": "Logo Italia", "team": "ITA", "countryCode": "IT", "position": "emblem", "image": "ita-emblems.png" },
+    { "number": 37, "name": "Gianluigi Donnarumma", "team": "ITA", "countryCode": "IT", "position": "player", "club": "PSG", "jersey": 1, "image": "ita-1-donnarumma.png" },
+    { "number": 38, "name": "Nicolò Barella", "team": "ITA", "countryCode": "IT", "position": "player", "club": "Inter Milan", "jersey": 18, "image": "ita-18-barella.png" },
+    { "number": 39, "name": "Lorenzo Pellegrini", "team": "ITA", "countryCode": "IT", "position": "player", "club": "AS Roma", "jersey": 7, "image": "ita-7-pellegrini.png" },
+    { "number": 40, "name": "Alessandro Bastoni", "team": "ITA", "countryCode": "IT", "position": "player", "club": "Inter Milan", "jersey": 15, "image": "ita-15-bastoni.png" },
+
+    { "number": 41, "name": "Logo Nederland", "team": "NED", "countryCode": "NL", "position": "emblem", "image": "ned-emblems.png" },
+    { "number": 42, "name": "Virgil van Dijk", "team": "NED", "countryCode": "NL", "position": "player", "club": "Liverpool", "jersey": 4, "image": "ned-4-vandijk.png" },
+    { "number": 43, "name": "Virgil van Dijk (C)", "team": "NED", "countryCode": "NL", "position": "player", "club": "Liverpool", "jersey": 4, "image": "ned-4-vandijk-captain.png" },
+    { "number": 44, "name": "Xavi Simons", "team": "NED", "countryCode": "NL", "position": "player", "club": "RB Leipzig", "jersey": 20, "image": "ned-20-simons.png" },
+    { "number": 45, "name": "Bart Verbruggen", "team": "NED", "countryCode": "NL", "position": "player", "club": "Brighton", "jersey": 1, "image": "ned-1-verbruggen.png" },
+
+    { "number": 46, "name": "Logo Portugal", "team": "POR", "countryCode": "PT", "position": "emblem", "image": "por-emblems.png" },
+    { "number": 47, "name": "Cristiano Ronaldo", "team": "POR", "countryCode": "PT", "position": "player", "club": "Al-Nassr", "jersey": 7, "image": "por-7-ronaldo.png" },
+    { "number": 48, "name": "Bruno Fernandes", "team": "POR", "countryCode": "PT", "position": "player", "club": "Manchester United", "jersey": 8, "image": "por-8-bruno.png" },
+    { "number": 49, "name": "Rúben Dias", "team": "POR", "countryCode": "PT", "position": "player", "club": "Manchester City", "jersey": 3, "image": "por-3-dias.png" },
+    { "number": 50, "name": "Diogo Jota", "team": "POR", "countryCode": "PT", "position": "player", "club": "Liverpool", "jersey": 20, "image": "por-20-jota.png" }
+  ]
+}
