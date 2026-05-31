@@ -1,5 +1,6 @@
+import { useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
 import { getStickerByNumber } from '../../data/catalog'
 import { useCollectionStore } from '../../store/collectionStore'
 
@@ -9,10 +10,53 @@ export default function StickerDetailPage() {
   const getCount = useCollectionStore((s) => s.getCount)
   const increment = useCollectionStore((s) => s.increment)
   const decrement = useCollectionStore((s) => s.decrement)
+  const setZero = useCollectionStore((s) => s.setZero)
+  const getAdjacentStickerNumbers = useCollectionStore((s) => s.getAdjacentStickerNumbers)
 
   const number = Number(id)
   const sticker = getStickerByNumber(number)
   const count = getCount(number)
+  const adjacent = getAdjacentStickerNumbers(number)
+
+  const touchStartX = useRef<number | null>(null)
+  const touchEndX = useRef<number | null>(null)
+  const MIN_SWIPE = 50
+
+  const triggerHaptic = () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate(20)
+    }
+  }
+
+  const navigateTo = (stickerNumber: number) => {
+    navigate(`/sticker/${stickerNumber}`)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+    touchEndX.current = null
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return
+
+    const delta = touchStartX.current - touchEndX.current
+
+    if (Math.abs(delta) > MIN_SWIPE) {
+      if (delta > 0 && adjacent.next !== null) {
+        navigateTo(adjacent.next)
+      } else if (delta < 0 && adjacent.prev !== null) {
+        navigateTo(adjacent.prev)
+      }
+    }
+
+    touchStartX.current = null
+    touchEndX.current = null
+  }
 
   if (!sticker) {
     return (
@@ -24,26 +68,103 @@ export default function StickerDetailPage() {
   }
 
   return (
-    <div className="flex flex-col h-full p-6 gap-6">
-      <div className="flex items-center gap-4">
-        <button onClick={() => navigate(-1)} className="text-ink">
+    <div
+      className="flex flex-col h-full select-none"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Header */}
+      <div className="flex items-center gap-4 p-4">
+        <button onClick={() => navigate(-1)} className="text-ink active:scale-95 transition-transform">
           <ArrowLeft size={24} />
         </button>
-        <div>
+        <div className="flex-1">
           <h1 className="text-xl font-bold text-ink">{sticker.name}</h1>
           <p className="text-missing text-sm">#{sticker.number} · {sticker.team}</p>
         </div>
+        <div className="text-xs text-missing font-mono">pg. {sticker.page ?? '?'}</div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center">
-        <div className="bg-surface rounded-2xl w-48 h-64 flex items-center justify-center">
-          <span className="text-missing text-sm text-center px-4">{sticker.image}</span>
+      {/* Swipe Navigation */}
+      <div className="flex items-center px-2 mb-2">
+        {adjacent.prev !== null ? (
+          <button
+            onClick={() => navigateTo(adjacent.prev!)}
+            className="flex items-center gap-1 text-ink text-sm active:scale-95 transition-transform"
+          >
+            <ChevronLeft size={16} />
+            <span className="text-xs opacity-60">#{adjacent.prev}</span>
+          </button>
+        ) : <div />}
+        {adjacent.next !== null && (
+          <button
+            onClick={() => navigateTo(adjacent.next!)}
+            className="ml-auto flex items-center gap-1 text-ink text-sm active:scale-95 transition-transform"
+          >
+            <span className="text-xs opacity-60">#{adjacent.next}</span>
+            <ChevronRight size={16} />
+          </button>
+        )}
+      </div>
+
+      {/* Sticker Preview */}
+      <div className="flex-1 flex items-center justify-center p-6">
+        <div
+          className={`
+            bg-surface rounded-2xl w-56 h-80 flex flex-col items-center justify-center
+            overflow-hidden shadow-lg
+            transition-all duration-200
+            ${count > 0 ? '' : 'grayscale opacity-60'}
+          `}
+        >
+          {/* Flag placeholder */}
+          <div className="text-4xl mb-2">{sticker.countryCode === 'AR' ? '🇦🇷' : sticker.countryCode === 'BR' ? '🇧🇷' : '🏳️'}</div>
+          {/* Sticker number */}
+          <span className="text-5xl font-bold text-ink opacity-20 mb-2">#{sticker.number}</span>
+          {/* Player name */}
+          <span className="text-sm font-medium text-ink text-center px-4">{sticker.name}</span>
+          {/* Position badge */}
+          <span className="mt-2 px-2 py-0.5 rounded-full bg-accent text-white text-xs">{sticker.position}</span>
+          {/* Club */}
+          {sticker.club && (
+            <span className="mt-1 text-xs text-missing">{sticker.club}</span>
+          )}
+          {/* Jersey */}
+          {sticker.jersey !== undefined && (
+            <span className="text-xs text-missing">#{sticker.jersey}</span>
+          )}
         </div>
       </div>
 
-      <div className="flex items-center justify-center gap-8">
+      {/* Player Info Row */}
+      <div className="flex items-center justify-center gap-4 px-6 pb-4 text-xs text-missing">
+        <span className="font-medium">{sticker.team}</span>
+        <span>·</span>
+        <span>{sticker.position}</span>
+        {sticker.club && (
+          <>
+            <span>·</span>
+            <span className="truncate max-w-24">{sticker.club}</span>
+          </>
+        )}
+        {sticker.jersey !== undefined && (
+          <>
+            <span>·</span>
+            <span>#{sticker.jersey}</span>
+          </>
+        )}
+      </div>
+
+      {/* Count Controls */}
+      <div className="flex items-center justify-center gap-8 p-6 border-t border-surface">
         <button
-          onClick={() => decrement(sticker.number)}
+          onClick={() => {
+            if (count > 0) {
+              decrement(sticker.number)
+              triggerHaptic()
+            }
+          }}
           className="w-14 h-14 rounded-full bg-surface text-ink text-2xl font-bold flex items-center justify-center active:scale-95 transition-transform"
         >
           −
@@ -53,12 +174,30 @@ export default function StickerDetailPage() {
           <span className="text-missing text-xs uppercase tracking-wider">Have</span>
         </div>
         <button
-          onClick={() => increment(sticker.number)}
+          onClick={() => {
+            increment(sticker.number)
+            triggerHaptic()
+          }}
           className="w-14 h-14 rounded-full bg-accent text-white text-2xl font-bold flex items-center justify-center active:scale-95 transition-transform"
         >
           +
         </button>
       </div>
+
+      {/* Set Zero button */}
+      {count > 0 && (
+        <div className="px-6 pb-6">
+          <button
+            onClick={() => {
+              setZero(sticker.number)
+              triggerHaptic()
+            }}
+            className="w-full py-2 rounded-lg bg-surface text-danger text-sm font-medium active:scale-95 transition-transform"
+          >
+            Remove all (set to 0)
+          </button>
+        </div>
+      )}
     </div>
   )
 }

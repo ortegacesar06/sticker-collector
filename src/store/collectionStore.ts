@@ -12,24 +12,28 @@ interface CollectionState {
   filter: FilterType
   teamFilter: string | null
   searchQuery: string
+  quickAddMode: boolean
 
   // Actions
   loadFromDexie: () => Promise<void>
   increment: (stickerNumber: number) => Promise<void>
   decrement: (stickerNumber: number) => Promise<void>
   setCount: (stickerNumber: number, count: number) => Promise<void>
+  setZero: (stickerNumber: number) => Promise<void>
   resetAll: () => Promise<void>
   exportData: () => Promise<CollectionEntry[]>
   importData: (entries: CollectionEntry[], mode: 'merge' | 'replace') => Promise<void>
   setFilter: (filter: FilterType) => void
   setTeamFilter: (team: string | null) => void
   setSearchQuery: (query: string) => void
+  setQuickAddMode: (enabled: boolean) => void
 
   // Computed (not stored)
   getCount: (stickerNumber: number) => number
   getFilteredNumbers: () => number[]
   getTeamProgress: () => TeamProgress[]
   getStats: () => { total: number; have: number; missing: number; duplicates: number; duplicateCount: number }
+  getAdjacentStickerNumbers: (stickerNumber: number) => { prev: number | null; next: number | null }
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -41,6 +45,7 @@ export const useCollectionStore = create<CollectionState>((set, get) => ({
   filter: 'all',
   teamFilter: null,
   searchQuery: '',
+  quickAddMode: false,
 
   // ── Persistence ────────────────────────────────────────────────────────────
 
@@ -103,6 +108,17 @@ export const useCollectionStore = create<CollectionState>((set, get) => ({
     }
   },
 
+  setZero: async (stickerNumber) => {
+    const current = get().getCount(stickerNumber)
+    if (current === 0) return
+    await deleteEntry(stickerNumber)
+    set((s) => {
+      const entries = new Map(s.entries)
+      entries.delete(stickerNumber)
+      return { entries }
+    })
+  },
+
   resetAll: async () => {
     await clearCollection()
     set({ entries: new Map() })
@@ -126,6 +142,7 @@ export const useCollectionStore = create<CollectionState>((set, get) => ({
   setFilter: (filter) => set({ filter }),
   setTeamFilter: (team) => set({ teamFilter: team }),
   setSearchQuery: (query) => set({ searchQuery: query }),
+  setQuickAddMode: (enabled) => set({ quickAddMode: enabled }),
 
   // ── Computed ──────────────────────────────────────────────────────────────
 
@@ -222,6 +239,21 @@ export const useCollectionStore = create<CollectionState>((set, get) => ({
       missing,
       duplicates: have - catalog.stickers.length + missing, // stickers with count > 1
       duplicateCount,
+    }
+  },
+
+  getAdjacentStickerNumbers: (stickerNumber) => {
+    const catalog = getCatalog()
+    if (!catalog) return { prev: null, next: null }
+
+    const stickerNumbers = catalog.stickers.map((s) => s.number).sort((a, b) => a - b)
+    const idx = stickerNumbers.indexOf(stickerNumber)
+
+    if (idx === -1) return { prev: null, next: null }
+
+    return {
+      prev: idx > 0 ? stickerNumbers[idx - 1] : null,
+      next: idx < stickerNumbers.length - 1 ? stickerNumbers[idx + 1] : null,
     }
   },
 }))

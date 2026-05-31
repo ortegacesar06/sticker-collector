@@ -9,6 +9,8 @@ interface Props {
 export function StickerCell({ sticker }: Props) {
   const navigate = useNavigate()
   const getCount = useCollectionStore((s) => s.getCount)
+  const increment = useCollectionStore((s) => s.increment)
+  const quickAddMode = useCollectionStore((s) => s.quickAddMode)
 
   const count = getCount(sticker.number)
   const has = count > 0
@@ -16,9 +18,24 @@ export function StickerCell({ sticker }: Props) {
 
   const bgClass = has ? 'bg-pitch' : 'bg-missing'
 
+  const triggerHaptic = () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate(20)
+    }
+  }
+
+  const handleClick = async () => {
+    if (quickAddMode) {
+      await increment(sticker.number)
+      triggerHaptic()
+    } else {
+      navigate(`/sticker/${sticker.number}`)
+    }
+  }
+
   return (
     <button
-      onClick={() => navigate(`/sticker/${sticker.number}`)}
+      onClick={handleClick}
       className={`
         relative w-full aspect-[3/4] rounded-lg ${bgClass} text-white
         flex flex-col items-center justify-center overflow-hidden

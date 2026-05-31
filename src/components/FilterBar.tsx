@@ -1,3 +1,4 @@
+import { Zap } from 'lucide-react'
 import { useCollectionStore } from '../store/collectionStore'
 import { getCatalog, getTeams } from '../data/catalog'
 import type { FilterType } from '../data/types'
@@ -13,9 +14,11 @@ export function FilterBar() {
   const filter = useCollectionStore((s) => s.filter)
   const teamFilter = useCollectionStore((s) => s.teamFilter)
   const searchQuery = useCollectionStore((s) => s.searchQuery)
+  const quickAddMode = useCollectionStore((s) => s.quickAddMode)
   const setFilter = useCollectionStore((s) => s.setFilter)
   const setTeamFilter = useCollectionStore((s) => s.setTeamFilter)
   const setSearchQuery = useCollectionStore((s) => s.setSearchQuery)
+  const setQuickAddMode = useCollectionStore((s) => s.setQuickAddMode)
 
   const catalog = getCatalog()
   const teams = catalog ? getTeams(catalog) : []
@@ -36,6 +39,19 @@ export function FilterBar() {
             {f.label}
           </button>
         ))}
+
+        <button
+          onClick={() => setQuickAddMode(!quickAddMode)}
+          className={`ml-auto px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+            quickAddMode
+              ? 'bg-pitch text-white'
+              : 'bg-surface text-ink'
+          }`}
+          title="Quick-add: tap a cell to register"
+        >
+          <Zap size={14} />
+          Quick
+        </button>
       </div>
 
       <div className="flex gap-2">
