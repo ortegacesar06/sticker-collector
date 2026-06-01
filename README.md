@@ -1,93 +1,90 @@
 # Mundial 2026 — Sticker Collector
 
-> App para registrar los cromos del álbum Panini FIFA World Cup 2026. Sin cuenta, sin nube, sin código QR. Solo vos y tus cromos.
+> Track your Panini FIFA World Cup 2026 album stickers. No account, no cloud, no QR codes. Just you and your stickers.
 
 [![PWA](https://img.shields.io/badge/PWA-Installable-brightgreen)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
 [![Offline](https://img.shields.io/badge/Offline-Full%20Support-brightgreen)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Offline)
 
-## Demo
+## Features
 
-Abrí `http://localhost:5173` después de levantar el proyecto, o instalá la PWA en tu celular para la experiencia completa.
+- **Virtualized grid** — all 960 album stickers rendered smoothly (color = have, grayscale = missing)
+- **Quick-add mode** — one tap to register a sticker (+1)
+- **Sticker detail** — full info with +/- controls and swipe navigation
+- **Camera OCR** — point at the sticker number, Tesseract.js reads it, confirm to register
+- **Duplicates** — list all duplicates and generate a shareable trade list
+- **Progress stats** — completion %, per-team progress, "almost complete" highlights
+- **Backup/restore** — export collection to JSON, import on another device
+- **Offline-first** — works without internet after first load
+- **Light/dark/system** theme
 
-## Qué hace
+## Tech Stack
 
-- **Grilla virtualizada** con los 960 cromos del álbum — a color los que tenés, en blanco y negro los que faltan
-- **Registro rápido** (un toque = +1 cromo) y modo detalle con +/-
-- **Escaneo por cámara** — apuntás al número del cromo, el OCR lo detecta y lo registra
-- **Repetidos** — список всех duplicates + генерация списка для обмена
-- **Estadísticas** — porcentaje completado, progreso por equipo, destacados "casi completo"
-- **Backup** — exportás tu colección a JSON, la importás en otro dispositivo
-- **Offline** — funciona sin internet después de la primera carga
-- **Tema claro/oscuro** con preferencia del sistema
-
-## Stack
-
-| Capa | Tecnología |
+| Layer | Technology |
 |---|---|
 | UI | React 19 + TypeScript |
 | Bundler | Vite |
-| Estilos | Tailwind CSS |
-| Estado | Zustand |
-| Persistencia | Dexie.js (IndexedDB) |
-| Virtualización | @tanstack/react-virtual |
+| Styles | Tailwind CSS |
+| State | Zustand |
+| Persistence | Dexie.js (IndexedDB) |
+| Virtualization | @tanstack/react-virtual |
 | OCR | Tesseract.js |
 | PWA | vite-plugin-pwa (Workbox) |
-| Iconos | lucide-react |
+| Icons | lucide-react |
 | Routing | react-router-dom |
 
-## Primeros pasos
+## Getting Started
 
 ```bash
-# Clonar y entrar
+# Clone and enter
 cd sticker-collector
 
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Levantar en desarrollo
+# Start dev server
 npm run dev
 
-# Tests
+# Run tests
 npm test
 
-# Build de producción
+# Production build
 npm run build
 ```
 
-## Regenerar el catálogo
+## Regenerate the Catalog
 
-El catálogo tiene 960 cromos placeholder por defecto. Si tenés el checklist real:
+The catalog ships with 960 placeholder stickers. To regenerate with your own data:
 
 ```bash
 node --import=tsx scripts/build-catalog.ts
 ```
 
-Esto regenera `public/data/catalog.2026.json` y las imágenes placeholder en `public/assets/stickers/`.
+This regenerates `public/data/catalog.2026.json` and placeholder images in `public/assets/stickers/`.
 
-## Arquitectura
+## Architecture
 
 ```
 src/
 ├── data/
-│   ├── types.ts      # Contratos TypeScript
-│   ├── db.ts         # Schema Dexie (collection, meta, userImages)
-│   └── catalog.ts    # Loader del catálogo con validación
+│   ├── types.ts      # TypeScript contracts
+│   ├── db.ts         # Dexie schema (collection, meta, userImages)
+│   └── catalog.ts    # Async catalog loader with validation
 ├── store/
-│   └── collectionStore.ts   # Zustand — fuente de verdad en memoria
-├── components/       # Componentes shared
+│   └── collectionStore.ts   # Zustand — in-memory source of truth
+├── components/       # Shared components
 │   ├── AlbumGrid.tsx
 │   ├── StickerCell.tsx
 │   ├── FilterBar.tsx
 │   └── BottomNav.tsx
 └── features/
-    ├── album/        # / — grilla principal
-    ├── scan/         # /scan — cámara + OCR
-    ├── repes/        # /repes — duplicados + lista de intercambio
-    ├── stats/        # /stats — progreso
-    ├── sticker/      # /sticker/:id — detalle del cromo
-    └── settings/     # /settings — backup, tema, reset
+    ├── album/        # / — main grid
+    ├── scan/         # /scan — camera + OCR
+    ├── repes/        # /repes — duplicates + trade list
+    ├── stats/        # /stats — progress
+    ├── sticker/      # /sticker/:id — sticker detail
+    └── settings/     # /settings — backup, theme, reset
 ```
 
 ## Disclaimer
 
-Este es un proyecto de fans, no está afiliado a Panini ni a FIFA. Las imágenes placeholder son solo para desarrollo. Ver [consideraciones legales](https://github.com/ortegacesar06/sticker-collector/blob/main/SPEC.md#13-consideraciones-legales) en las specs para más detalles.
+This is an unofficial fan project and is not affiliated with Panini or FIFA. Placeholder images are for development only. See the [specs](./SPEC.md#13-consideraciones-legales) for full legal notes.
