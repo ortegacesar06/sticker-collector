@@ -1,17 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg: #FFFFFF;
-  --surface: #F4F5F7;
-  --ink: #0E1116;
+  --bg: #FAFAFA;
+  --surface: #F0F0F0;
+  --ink: #1A1A1A;
   --accent: #E5007D;
-  --accent-2: #0057FF;
-  --gold: #F5B301;
-  --pitch: #00A86B;
-  --missing: #9AA0A6;
-  --danger: #E23636;
+  --accent-2: #0066CC;
+  --gold: #FFB800;
+  --pitch: #00A651;
+  --missing: #B0B0B0;
+  --danger: #DC2626;
+}
+
+.dark {
+  --bg: #121212;
+  --surface: #1E1E1E;
+  --ink: #F0F0F0;
+  --accent: #FF3D9B;
+  --accent-2: #3D8BFF;
+  --gold: #FFC233;
+  --pitch: #00D68F;
+  --missing: #6B7280;
+  --danger: #FF4D4D;
 }
 
 * {
@@ -29,7 +43,83 @@ body,
 body {
   background-color: var(--bg);
   color: var(--ink);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Barlow Condensed', 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Touch target minimum size */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  z-index: 9999;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Sticker cell animations */
+.sticker-cell {
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.sticker-cell:active {
+  transform: scale(0.95);
+}
+
+/* Album grid team header */
+.team-header {
+  background: linear-gradient(to right, var(--accent) 4px, transparent 4px);
+  padding-left: 0.5rem;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--missing);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
